@@ -1,0 +1,18 @@
+{
+    "name": "sara_rzbn/queryspy",
+    "description": "Detect and analyze slow queries in Laravel",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "QuerySpy\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "QuerySpy\\QuerySpyServiceProvider"
+            ]
+        }
+    },
+    "require": {}
+}
