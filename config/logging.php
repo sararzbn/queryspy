@@ -126,7 +126,11 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
-
+        'queryspy' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/queryspy.log'),
+            'level' => 'info',
+        ],
     ],
 
 ];
