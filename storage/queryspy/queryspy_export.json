@@ -1,0 +1,26 @@
+[
+    {
+        "time_ms": 1003.89,
+        "sql": "SELECT pg_sleep(1)",
+        "source": "unknown",
+        "line": ""
+    },
+    {
+        "time_ms": 1000.95,
+        "sql": "SELECT pg_sleep(1)",
+        "source": "unknown",
+        "line": ""
+    },
+    {
+        "time_ms": 1005.15,
+        "sql": "SELECT pg_sleep(1)",
+        "source": "vendor\/laravel\/framework\/src\/Illuminate\/Events\/Dispatcher.php",
+        "line": 461
+    },
+    {
+        "time_ms": 1001.46,
+        "sql": "SELECT pg_sleep(1)",
+        "source": "routes\/web.php",
+        "line": 12
+    }
+]

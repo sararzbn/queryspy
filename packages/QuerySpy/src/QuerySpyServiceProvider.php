@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use QuerySpy\Console\AnalyzeCommand;
+use QuerySpy\Console\ExportCommand;
 
 class QuerySpyServiceProvider extends ServiceProvider
 {
@@ -52,6 +53,7 @@ class QuerySpyServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 AnalyzeCommand::class,
+                ExportCommand::class,
             ]);
         }
 
