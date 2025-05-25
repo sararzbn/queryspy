@@ -3,7 +3,7 @@
 namespace QuerySpy\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
+use QuerySpy\Models\QuerySpyEntry;
 
 class ExportCommand extends Command
 {
@@ -16,51 +16,37 @@ class ExportCommand extends Command
     public function handle(): void
     {
         $format = $this->option('format');
-        $logPath = storage_path('logs/queryspy.log');
-        $exportDir = storage_path('queryspy');
-        $filename = $exportDir . '/queryspy_export.' . $format;
 
-        if (!file_exists($logPath)) {
-            $this->error('Log file not found: ' . $logPath);
+        $entries = QuerySpyEntry::orderByDesc('created_at')->get();
+
+        if ($entries->isEmpty()) {
+            $this->warn('No entries to export.');
             return;
         }
 
-        File::ensureDirectoryExists($exportDir);
-
-        $lines = file($logPath);
-        $entries = [];
-
-        foreach ($lines as $line) {
-            if (!str_contains($line, 'Slow query detected')) continue;
-
-            $jsonStart = strpos($line, '{');
-            if ($jsonStart === false) continue;
-
-            $json = substr($line, $jsonStart);
-            $data = json_decode($json, true);
-            if (!$data) continue;
-
-            $entries[] = [
-                'time_ms' => round($data['time_ms'], 2),
-                'sql' => $data['sql'],
-                'source' => $data['source']['file'] ?? 'unknown',
-                'line' => $data['source']['line'] ?? '',
-            ];
+        $exportDir = storage_path('queryspy');
+        if (!is_dir($exportDir)) {
+            mkdir($exportDir, 0755, true);
         }
 
         if ($format === 'json') {
-            file_put_contents($filename, json_encode($entries, JSON_PRETTY_PRINT));
-            $this->info("Exported to JSON: $filename");
-        } elseif ($format === 'csv') {
-            $csv = fopen($filename, 'w');
-            fputcsv($csv, ['time_ms', 'sql', 'source', 'line']);
-            foreach ($entries as $entry) {
-                fputcsv($csv, $entry);
-            }
-            fclose($csv);
-            $this->info("Exported to CSV: $filename");
+            $path = $exportDir . '/queryspy_export.json';
+            file_put_contents($path, $entries->toJson(JSON_PRETTY_PRINT));
         } else {
-            $this->error("Unsupported format: $format (use 'csv' or 'json')");
+            $path = $exportDir . '/queryspy_export.csv';
+            $fp = fopen($path, 'w');
+            fputcsv($fp, ['time_ms', 'sql', 'source', 'line']);
+            foreach ($entries as $entry) {
+                fputcsv($fp, [
+                    round($entry->time_ms, 2),
+                    $entry->sql,
+                    $entry->source_file ?? 'unknown',
+                    $entry->source_line ?? '',
+                ]);
+            }
+            fclose($fp);
         }
+
+        $this->info("Exported to " . strtoupper($format) . ": {$path}");
     }
 }
