@@ -11,6 +11,10 @@
         <testsuite name="Feature">
             <directory>tests/Feature</directory>
         </testsuite>
+        <testsuite name="QuerySpy">
+            <directory>./packages/QuerySpy/tests/Feature</directory>
+        </testsuite>
+
     </testsuites>
     <source>
         <include>
