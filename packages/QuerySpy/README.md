@@ -27,7 +27,7 @@
 2. Require the package:
 
 ```
-composer require sara-rzbn/queryspy:dev-main
+composer require sararzbn/queryspy:dev-main
 ```
 
 3. Make sure autoload is set (optional if not already):
@@ -109,7 +109,7 @@ Covers:
 
 ## 👩‍💻 Author
 
-Created with ❤️ by [Sara Rouzbahani](https://github.com/sara-rzbn)
+Created with ❤️ by [Sara Rouzbahani](https://github.com/sararzbn)
 
 ## 📄 License
 
