@@ -44,7 +44,34 @@ class DashboardController extends Controller
 
         }
 
-        return view('queryspy::dashboard', ['entries' => $entries]);
+        $search = request('search');
+        $minTime = request('min_time');
+        $sourceFilter = request('source');
+
+        $entries = array_filter($entries, function ($entry) use ($search, $minTime, $sourceFilter) {
+            if ($search && !str_contains(strtolower($entry['sql']), strtolower($search))) {
+                return false;
+            }
+
+            if ($minTime && $entry['time'] < (float) $minTime) {
+                return false;
+            }
+
+            if ($sourceFilter && !str_contains($entry['source'], $sourceFilter)) {
+                return false;
+            }
+
+            return true;
+        });
+
+
+        return view('queryspy::dashboard', [
+            'entries' => $entries,
+            'search' => request('search'),
+            'minTime' => request('min_time'),
+            'sourceFilter' => request('source'),
+        ]);
+
     }
 
     /**
