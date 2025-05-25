@@ -12,3 +12,4 @@ Route::get('/test-slow', function () {
     DB::select('SELECT pg_sleep(1)');
     return 'done';
 });
+
