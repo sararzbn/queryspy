@@ -1,5 +1,2 @@
 time_ms,sql,source,line
-1003.89,"SELECT pg_sleep(1)",unknown,
-1000.95,"SELECT pg_sleep(1)",unknown,
-1005.15,"SELECT pg_sleep(1)",vendor/laravel/framework/src/Illuminate/Events/Dispatcher.php,461
-1001.46,"SELECT pg_sleep(1)",routes/web.php,12
+1001.2,"SELECT * FROM test",routes/web.php,10
