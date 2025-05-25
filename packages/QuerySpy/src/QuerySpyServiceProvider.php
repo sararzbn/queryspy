@@ -22,16 +22,31 @@ class QuerySpyServiceProvider extends ServiceProvider
             $threshold = config('queryspy.threshold', 300);
 
             if ($query->time > $threshold) {
+                $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 20);
+
+                $source = collect($backtrace)->first(function ($trace) {
+                    if (!isset($trace['file'])) return false;
+
+                    $file = $trace['file'];
+
+                    return str_starts_with($file, base_path('routes')) ||
+                        str_starts_with($file, base_path('app')) ||
+                        str_starts_with($file, base_path('resources'));
+                });
+
+
                 Log::channel('queryspy')->info('Slow query detected', [
                     'sql' => $query->sql,
                     'bindings' => $query->bindings,
                     'time_ms' => $query->time,
-                    'source' => collect(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS))
-                        ->filter(fn ($trace) => isset($trace['file']) && str_contains($trace['file'], base_path('app')))
-                        ->first(),
+                    'source' => $source ? [
+                        'file' => str_replace(base_path() . '/', '', $source['file']),
+                        'line' => $source['line'] ?? null,
+                    ] : null,
                 ]);
             }
         });
+
 
         if ($this->app->runningInConsole()) {
             $this->commands([
