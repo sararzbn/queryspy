@@ -5,6 +5,7 @@ namespace QuerySpy;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use QuerySpy\Console\AnalyzeCommand;
 
 class QuerySpyServiceProvider extends ServiceProvider
 {
@@ -31,6 +32,12 @@ class QuerySpyServiceProvider extends ServiceProvider
                 ]);
             }
         });
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                AnalyzeCommand::class,
+            ]);
+        }
 
 
     }
