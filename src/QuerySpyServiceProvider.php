@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use QuerySpy\Console\AnalyzeCommand;
 use QuerySpy\Console\ClearCommand;
 use QuerySpy\Console\ExportCommand;
+use QuerySpy\Models\QuerySpyEntry;
 
 class QuerySpyServiceProvider extends ServiceProvider
 {
@@ -47,6 +48,16 @@ class QuerySpyServiceProvider extends ServiceProvider
                         'line' => $source['line'] ?? null,
                     ] : null,
                 ]);
+
+                QuerySpyEntry::create([
+                    'sql' => $query->sql,
+                    'bindings' => json_encode($query->bindings),
+                    'time_ms' => $query->time,
+                    'source_file' => $source['file'] ?? null,
+                    'source_line' => $source['line'] ?? null,
+                ]);
+
+
             }
         });
 
@@ -66,6 +77,7 @@ class QuerySpyServiceProvider extends ServiceProvider
         }
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'queryspy');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
     }
 
