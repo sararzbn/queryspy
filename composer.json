@@ -1,7 +1,15 @@
 {
     "name": "sara_rzbn/queryspy",
-    "description": "Detect and analyze slow queries in Laravel",
+    "description": "Laravel profiler for slow queries with smart suggestions",
     "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sara Rouzbahani",
+            "email": "srouzbahani35@gmail.com"
+        }
+    ],
+    "require": {},
     "autoload": {
         "psr-4": {
             "QuerySpy\\": "src/"
@@ -14,5 +22,6 @@
             ]
         }
     },
-    "require": {}
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
