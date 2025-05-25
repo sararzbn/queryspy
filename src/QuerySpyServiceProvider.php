@@ -4,6 +4,7 @@ namespace QuerySpy;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use QuerySpy\Console\AnalyzeCommand;
 
@@ -54,6 +55,13 @@ class QuerySpyServiceProvider extends ServiceProvider
             ]);
         }
 
+        if (! $this->app->routesAreCached()) {
+            Route::middleware('web')
+                ->prefix('queryspy')
+                ->group(__DIR__.'/../routes/web.php');
+        }
+
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'queryspy');
 
     }
 
