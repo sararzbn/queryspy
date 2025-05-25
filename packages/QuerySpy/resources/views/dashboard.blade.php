@@ -4,13 +4,25 @@
     <title>QuerySpy Dashboard</title>
     <style>
         body { font-family: sans-serif; padding: 2rem; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 0.5rem; border: 1px solid #ccc; text-align: left; }
+        input, button {
+            padding: 0.4rem 0.6rem;
+            margin-right: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #2d6cdf;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1b4fab;
+        }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 0.5rem; border: 1px solid #ccc; text-align: left; vertical-align: top; }
         th { background: #f8f8f8; }
-        tr:hover { background: #f0f0f0; }
+        tr:hover { background: #f4f4f4; }
         code { font-family: monospace; background: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
-        input { padding: 5px; margin-right: 10px; }
-        button { padding: 5px 10px; }
     </style>
 </head>
 <body>
