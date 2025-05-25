@@ -21,6 +21,7 @@
             <th>Time (ms)</th>
             <th>SQL</th>
             <th>Source</th>
+            <th>Suggestion</th>
         </tr>
         </thead>
         <tbody>
@@ -29,6 +30,7 @@
                 <td>{{ $entry['time'] }}</td>
                 <td><code>{{ $entry['sql'] }}</code></td>
                 <td>{{ $entry['source'] }}@if($entry['line']):{{ $entry['line'] }}@endif</td>
+                <td>{{ $entry['suggestion'] }}</td>
             </tr>
         @endforeach
         </tbody>
