@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use QuerySpy\Console\AnalyzeCommand;
+use QuerySpy\Console\ClearCommand;
 use QuerySpy\Console\ExportCommand;
 
 class QuerySpyServiceProvider extends ServiceProvider
@@ -54,6 +55,7 @@ class QuerySpyServiceProvider extends ServiceProvider
             $this->commands([
                 AnalyzeCommand::class,
                 ExportCommand::class,
+                ClearCommand::class,
             ]);
         }
 
