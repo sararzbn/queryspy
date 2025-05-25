@@ -6,79 +6,56 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Routing\Controller;
+use QuerySpy\Models\QuerySpyEntry;
 
 class DashboardController extends Controller
 {
-
     /**
      * @return Factory|View|Application|\Illuminate\View\View|object
      */
     public function index()
     {
-        $logPath = storage_path('logs/queryspy.log');
-
-        if (!file_exists($logPath)) {
-            return view('queryspy::dashboard', ['entries' => []]);
-        }
-
-        $lines = file($logPath);
-        $entries = [];
-
-        foreach ($lines as $line) {
-            if (!str_contains($line, 'Slow query detected')) continue;
-
-            $jsonStart = strpos($line, '{');
-            if ($jsonStart === false) continue;
-
-            $json = substr($line, $jsonStart);
-            $data = json_decode($json, true);
-            if (!$data) continue;
-
-            $entries[] = [
-                'sql' => $data['sql'],
-                'time' => round($data['time_ms'], 2),
-                'source' => $data['source']['file'] ?? 'unknown',
-                'line' => $data['source']['line'] ?? null,
-                'suggestion' => $this->getSuggestionForQuery($data['sql']),
-            ];
-
-        }
-
         $search = request('search');
         $minTime = request('min_time');
         $sourceFilter = request('source');
 
-        $entries = array_filter($entries, function ($entry) use ($search, $minTime, $sourceFilter) {
-            if ($search && !str_contains(strtolower($entry['sql']), strtolower($search))) {
-                return false;
-            }
+        $query = QuerySpyEntry::query()->orderByDesc('created_at');
 
-            if ($minTime && $entry['time'] < (float) $minTime) {
-                return false;
-            }
+        if ($search) {
+            $query->where('sql', 'ilike', "%$search%");
+        }
 
-            if ($sourceFilter && !str_contains($entry['source'], $sourceFilter)) {
-                return false;
-            }
+        if ($minTime) {
+            $query->where('time_ms', '>=', (float)$minTime);
+        }
 
-            return true;
+        if ($sourceFilter) {
+            $query->where('source_file', 'ilike', "%$sourceFilter%");
+        }
+
+        $entries = $query->get()->map(function ($entry) {
+            return [
+                'sql' => $entry->sql,
+                'time' => round($entry->time_ms, 2),
+                'source' => $entry->source_file ?? 'unknown',
+                'line' => $entry->source_line,
+                'suggestion' => $this->getSuggestionForQuery($entry->sql),
+            ];
         });
-
 
         return view('queryspy::dashboard', [
             'entries' => $entries,
-            'search' => request('search'),
-            'minTime' => request('min_time'),
-            'sourceFilter' => request('source'),
+            'search' => $search,
+            'minTime' => $minTime,
+            'sourceFilter' => $sourceFilter,
         ]);
-
     }
 
     /**
      * @param string $sql
      * @return string
      */
-    function getSuggestionForQuery(string $sql): string
+    protected function getSuggestionForQuery(string $sql): string
     {
         $normalized = strtolower($sql);
         $suggestions = [];
@@ -113,5 +90,4 @@ class DashboardController extends Controller
 
         return $suggestions ? implode(' | ', $suggestions) : '✅ Looks fine';
     }
-
 }
