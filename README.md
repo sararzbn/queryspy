@@ -59,20 +59,6 @@ Clear the log file:
 php artisan queryspy:clear
 ```
 
-## ✅ Test Suite
-
-Run:
-
-```
-php artisan test --testsuite=QuerySpy
-```
-
-Covers:
-- Model saving
-- Suggestion engine
-- Dashboard route
-- Export/clear commands
-
 ## 🧩 Roadmap
 
 - [ ] Live dashboard updates (AJAX polling)
