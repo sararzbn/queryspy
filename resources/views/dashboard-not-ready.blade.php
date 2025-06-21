@@ -5,7 +5,6 @@
         ⚠️ QuerySpy is not initialized. Please run the following:
     </p>
     <pre style="background: #f5f5f5; padding: 1rem; border-radius: 4px;">
-php artisan vendor:publish --tag=queryspy-migrations
-php artisan migrate
+        php artisan migrate
     </pre>
 @endsection
