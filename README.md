@@ -10,41 +10,11 @@
 - CLI commands to export or clear query logs
 - Works out of the box with zero config
 - 100% test coverage
-
 ## 📦 Installation
 
-1. Add the local path to your main `composer.json`:
+To install the package, simply run the following Composer command:
 
-```
-"repositories": [
-    {
-        "type": "path",
-        "url": "./packages/QuerySpy"
-    }
-]
-```
-
-2. Require the package:
-
-```
-composer require sararzbn/queryspy:dev-main
-```
-
-3. Make sure autoload is set (optional if not already):
-
-```
-"autoload": {
-    "psr-4": {
-        "QuerySpy\\": "packages/QuerySpy/src/"
-    }
-}
-```
-
-4. Dump autoload:
-
-```
-composer dump-autoload
-```
+composer require sararzbn/queryspy
 
 ## ⚙️ Configuration (optional)
 
