@@ -14,7 +14,9 @@
 
 To install the package, simply run the following Composer command:
 
+```
 composer require sararzbn/queryspy
+```
 
 ## ⚙️ Configuration (optional)
 
