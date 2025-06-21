@@ -8,6 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Routing\Controller;
 use QuerySpy\Models\QuerySpyEntry;
 use QuerySpy\Support\helpers;
+use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends Controller
 {
@@ -16,6 +17,10 @@ class DashboardController extends Controller
      */
     public function index()
     {
+        if (!Schema::hasTable('query_spy_entries')) {
+            return view('queryspy::dashboard-not-ready');
+        }
+
         $search = request('search');
         $minTime = request('min_time');
         $sourceFilter = request('source');

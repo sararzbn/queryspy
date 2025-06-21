@@ -10,6 +10,7 @@ use QuerySpy\Console\AnalyzeCommand;
 use QuerySpy\Console\ClearCommand;
 use QuerySpy\Console\ExportCommand;
 use QuerySpy\Models\QuerySpyEntry;
+use Illuminate\Support\Facades\Schema;
 
 class QuerySpyServiceProvider extends ServiceProvider
 {
@@ -23,9 +24,15 @@ class QuerySpyServiceProvider extends ServiceProvider
         ], 'queryspy-config');
 
         DB::listen(function ($query) {
+
             $threshold = config('queryspy.threshold', 300);
 
             if ($query->time > $threshold) {
+
+                // Guard: Do nothing if the table doesn't exist
+                if (!Schema::hasTable('query_spy_entries')) {
+                    return;
+                }
                 $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 20);
 
                 $source = collect($backtrace)->first(function ($trace) {
@@ -70,14 +77,14 @@ class QuerySpyServiceProvider extends ServiceProvider
             ]);
         }
 
-        if (! $this->app->routesAreCached()) {
+        if (!$this->app->routesAreCached()) {
             Route::middleware('web')
                 ->prefix('queryspy')
-                ->group(__DIR__.'/../routes/web.php');
+                ->group(__DIR__ . '/../routes/web.php');
         }
 
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'queryspy');
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'queryspy');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
     }
 

@@ -26,6 +26,16 @@ php artisan vendor:publish --tag=queryspy-config
 
 (Only needed if config publishing is supported)
 
+## 🗄️ Database Migration
+
+QuerySpy stores slow queries in a dedicated database table. To create it, run:
+
+
+```
+php artisan vendor:publish --tag=queryspy-migrations
+php artisan migrate
+```
+
 ## 🖥️ Usage
 
 ### Dashboard
