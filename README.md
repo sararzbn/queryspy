@@ -32,7 +32,6 @@ QuerySpy stores slow queries in a dedicated database table. To create it, run:
 
 
 ```
-php artisan vendor:publish --tag=queryspy-migrations
 php artisan migrate
 ```
 
