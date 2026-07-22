@@ -7,13 +7,14 @@ use Illuminate\Support\Facades\File;
 use QuerySpy\Models\QuerySpyEntry;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ExportCommandTest extends TestCase
 {
 
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_exports_queries_to_csv()
     {
 

@@ -4,10 +4,11 @@ namespace QuerySpy\Tests\Feature;
 
 use QuerySpy\Support\helpers;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class SuggestionTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_detects_common_slow_query_patterns()
     {
         $sql = 'SELECT * FROM posts JOIN categories ON posts.cat_id = categories.id JOIN users ON users.id = posts.user_id ORDER BY posts.created_at';
@@ -20,7 +21,7 @@ class SuggestionTest extends TestCase
     }
 
 
-    /** @test */
+    #[Test]
     public function it_returns_positive_message_for_optimized_queries()
     {
         $sql = 'SELECT id, name FROM users WHERE active = true LIMIT 10';

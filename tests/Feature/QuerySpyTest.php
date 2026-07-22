@@ -5,12 +5,13 @@ namespace QuerySpy\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use QuerySpy\Models\QuerySpyEntry;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class QuerySpyTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_can_store_a_slow_query_into_the_database()
     {
         QuerySpyEntry::create([

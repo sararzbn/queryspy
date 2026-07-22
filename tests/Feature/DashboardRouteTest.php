@@ -5,12 +5,13 @@ namespace QuerySpy\Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use QuerySpy\Models\QuerySpyEntry;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class DashboardRouteTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function it_loads_the_queryspy_dashboard_page()
     {
 

@@ -5,11 +5,11 @@ namespace QuerySpy\Tests\Feature;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ClearCommandTest extends TestCase
 {
-    /** @test */
-    /** @test */
+    #[Test]
     public function it_clears_the_log_file()
     {
         $logPath = storage_path('logs/queryspy.log');
