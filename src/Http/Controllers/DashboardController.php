@@ -28,7 +28,7 @@ class DashboardController extends Controller
         $query = QuerySpyEntry::query()->orderByDesc('created_at');
 
         if ($search) {
-            $query->where('sql', 'ilike', "%$search%");
+            $query->where('sql', 'like', "%$search%");
         }
 
         if ($minTime) {
@@ -36,7 +36,7 @@ class DashboardController extends Controller
         }
 
         if ($sourceFilter) {
-            $query->where('source_file', 'ilike', "%$sourceFilter%");
+            $query->where('source_file', 'like', "%$sourceFilter%");
         }
 
         $entries = $query->get()->map(function ($entry) {
