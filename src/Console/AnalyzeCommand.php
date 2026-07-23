@@ -3,42 +3,42 @@
 namespace QuerySpy\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Schema;
+use QuerySpy\Models\QuerySpyEntry;
 
 class AnalyzeCommand extends Command
 {
     protected $signature = 'queryspy:analyze';
-    protected $description = 'Analyze and display slow queries from queryspy.log';
+    protected $description = 'Analyze and display recorded slow queries';
 
     public function handle(): void
     {
-        $logPath = storage_path('logs/queryspy.log');
-
-        if (!file_exists($logPath)) {
-            $this->error('Log file not found: ' . $logPath);
+        if (!Schema::hasTable('query_spy_entries')) {
+            $this->warn('The query_spy_entries table does not exist. Run "php artisan migrate" first.');
             return;
         }
 
-        $lines = file($logPath);
+        // Slowest queries first — the most impactful ones to look at.
+        $entries = QuerySpyEntry::orderByDesc('time_ms')->get();
 
-        foreach ($lines as $line) {
-            if (!str_contains($line, 'Slow query detected')) continue;
+        if ($entries->isEmpty()) {
+            $this->info('No slow queries recorded.');
+            return;
+        }
 
-            $jsonStart = strpos($line, '{');
-            if ($jsonStart === false) continue;
-
-            $json = substr($line, $jsonStart);
-            $data = json_decode($json, true);
-
-            if (!is_array($data)) continue;
-
+        foreach ($entries as $entry) {
             $this->line('');
-            $this->warn("[!] Slow Query (" . round($data['time_ms'], 2) . " ms)");
-            $this->info("SQL: " . $data['sql']);
-            if (!empty($data['source']['file'])) {
-                $this->line("Source: {$data['source']['file']}:{$data['source']['line']}");
+            $this->warn('[!] Slow Query (' . round($entry->time_ms, 2) . ' ms)');
+            $this->info('SQL: ' . $entry->sql);
+
+            if ($entry->source_file) {
+                $this->line("Source: {$entry->source_file}:{$entry->source_line}");
             } else {
-                $this->line("Source: unknown");
+                $this->line('Source: unknown');
             }
         }
+
+        $this->line('');
+        $this->info('Total: ' . $entries->count() . ' slow queries.');
     }
 }
