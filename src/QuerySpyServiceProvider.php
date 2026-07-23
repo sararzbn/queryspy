@@ -10,6 +10,7 @@ use QuerySpy\Console\AnalyzeCommand;
 use QuerySpy\Console\ClearCommand;
 use QuerySpy\Console\ExportCommand;
 use QuerySpy\Models\QuerySpyEntry;
+use QuerySpy\Support\QuerySpy;
 use Illuminate\Support\Facades\Schema;
 
 class QuerySpyServiceProvider extends ServiceProvider
@@ -24,6 +25,11 @@ class QuerySpyServiceProvider extends ServiceProvider
         ], 'queryspy-config');
 
         DB::listen(function ($query) {
+
+            // Respect the master switch and the allowed environments.
+            if (!QuerySpy::isEnabled()) {
+                return;
+            }
 
             $threshold = config('queryspy.threshold', 300);
 

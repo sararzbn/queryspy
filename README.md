@@ -18,13 +18,34 @@ To install the package, simply run the following Composer command:
 composer require sararzbn/queryspy
 ```
 
-## ⚙️ Configuration (optional)
+## ⚙️ Configuration
+
+Publish the config file to customize QuerySpy:
 
 ```
 php artisan vendor:publish --tag=queryspy-config
 ```
 
-(Only needed if config publishing is supported)
+This creates `config/queryspy.php` with the following options:
+
+| Option | Default | Description |
+|---|---|---|
+| `enabled` | `true` | Master switch. Set `QUERYSPY_ENABLED=false` in `.env` to disable capturing entirely. |
+| `environments` | `['local', 'staging']` | Only capture queries in these environments. An empty array `[]` means capture everywhere. |
+| `threshold` | `300` | Queries slower than this many milliseconds are recorded. Override with `QUERYSPY_THRESHOLD`. |
+
+You can also configure these via `.env`:
+
+```
+QUERYSPY_ENABLED=true
+QUERYSPY_THRESHOLD=300
+```
+
+> **⚠️ Upgrade note (v1.2):** QuerySpy now only captures queries in the
+> environments listed in `environments` (default `local` and `staging`), so it
+> no longer writes to your **production** database out of the box. If you relied
+> on capturing in another environment, add it to the list or set `environments`
+> to `[]`.
 
 ## 🗄️ Database Migration
 
@@ -72,10 +93,16 @@ php artisan queryspy:export --format=csv
 php artisan queryspy:export --format=json
 ```
 
-Clear the log file:
+Clear all recorded slow queries (empties the database table and the log file):
 
 ```
 php artisan queryspy:clear
+```
+
+Analyze recorded slow queries in the terminal (slowest first):
+
+```
+php artisan queryspy:analyze
 ```
 
 ## 🧩 Roadmap
