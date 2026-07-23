@@ -18,4 +18,10 @@ return [
      * Queries slower than this many milliseconds are recorded.
      */
     'threshold' => env('QUERYSPY_THRESHOLD', 300),
+
+    /*
+     * How many days to keep recorded queries. The queryspy:prune command
+     * deletes entries older than this. Schedule it to keep the table tidy.
+     */
+    'retention_days' => env('QUERYSPY_RETENTION_DAYS', 7),
 ];

@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use QuerySpy\Console\AnalyzeCommand;
 use QuerySpy\Console\ClearCommand;
 use QuerySpy\Console\ExportCommand;
+use QuerySpy\Console\PruneCommand;
 use QuerySpy\Models\QuerySpyEntry;
 use QuerySpy\Support\QuerySpy;
 use Illuminate\Support\Facades\Schema;
@@ -80,6 +81,7 @@ class QuerySpyServiceProvider extends ServiceProvider
                 AnalyzeCommand::class,
                 ExportCommand::class,
                 ClearCommand::class,
+                PruneCommand::class,
             ]);
         }
 

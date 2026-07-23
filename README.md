@@ -105,6 +105,21 @@ Analyze recorded slow queries in the terminal (slowest first):
 php artisan queryspy:analyze
 ```
 
+Prune old entries so the table doesn't grow forever (uses `retention_days`, default 7):
+
+```
+php artisan queryspy:prune
+php artisan queryspy:prune --days=30
+```
+
+Schedule it in `routes/console.php` (or your scheduler) to run automatically:
+
+```php
+use Illuminate\Support\Facades\Schedule;
+
+Schedule::command('queryspy:prune')->daily();
+```
+
 ## 🧩 Roadmap
 
 - [ ] Live dashboard updates (AJAX polling)
