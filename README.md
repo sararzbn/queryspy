@@ -45,13 +45,23 @@ Open in browser:
 http://localhost:8000/queryspy
 ```
 
-### Trigger a slow query manually (for testing)
+### Seeding demo data (for testing)
+
+QuerySpy ships with a seeder that inserts fake slow-query rows into the
+`query_spy_entries` table, so you can test the dashboard, export, and analyze
+features without having to generate real slow queries first.
+
+Run it with:
 
 ```
-\DB::table('users')->whereRaw('pg_sleep(1)')->get();
+php artisan db:seed --class="QuerySpy\Database\Seeders\QuerySpySeeder"
 ```
 
-> `pg_sleep(1)` causes a delay on PostgreSQL.
+This inserts 40 sample slow queries. Use `php artisan queryspy:clear` to wipe them again.
+
+> **Note:** The seeder namespace is registered in the package's `composer.json`
+> autoload. If you change the package's `composer.json`, run
+> `composer update sararzbn/queryspy` so the app picks up the changes.
 
 ## 🛠️ CLI Commands
 
